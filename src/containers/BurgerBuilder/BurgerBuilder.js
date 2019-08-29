@@ -70,6 +70,7 @@ class BurgerBuilder extends Component {
     this.setState({ purchaseable: sum > 0 });
   }
 
+  //Remember to use this syntax for function defnition to allow use of this.xxx when passing down the tree
   purchaseHandler = () => {
     this.setState({ purchasing: true });
   }
