@@ -22,17 +22,19 @@ class BurgerBuilder extends Component {
     purchaseable: false,
     purchasing: false,
     loading: false,
-    error: false,
+    error: false
   };
 
   componentDidMount() {
-    axios.get("ingredients.json").then(response => {
-      console.log("Got ingredients");
-      this.setState({ ingredients: response.data });
-    })
-    .catch(error => {
-      this.setState({error:true});
-    });
+    axios
+      .get("ingredients.json")
+      .then(response => {
+        console.log("Got ingredients");
+        this.setState({ ingredients: response.data });
+      })
+      .catch(error => {
+        this.setState({ error: true });
+      });
   }
 
   addIngredientHandler = type => {
@@ -110,7 +112,16 @@ class BurgerBuilder extends Component {
     //   .then(response => this.setState({ loading: false, purchasing: false }))
     //   .catch(error => this.setState({ loading: false, purchasing: false }));
     //Wrapped in router and therefore have permission to-do this...
-    this.props.history.push('/checkout');
+    const queryParams = [];
+    for (let i in this.state.ingredients) {
+      queryParams.push(
+        encodeURIComponent(i) +
+          "=" +
+          encodeURIComponent(this.state.ingredients[i])
+      );
+    }
+    const queryString = queryParams.join('&');
+    this.props.history.push({ pathname: "/checkout", search: '?' + queryString });
   };
 
   render() {
@@ -124,7 +135,11 @@ class BurgerBuilder extends Component {
     // {salad: true, meat:false, ...}
 
     let orderSummary = null;
-    let burger = this.state.error ? <p>Ingredients can't be loaded</p> : <Spinner />;
+    let burger = this.state.error ? (
+      <p>Ingredients can't be loaded</p>
+    ) : (
+      <Spinner />
+    );
     if (this.state.ingredients) {
       burger = (
         <Aux>
