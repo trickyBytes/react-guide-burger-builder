@@ -92,26 +92,6 @@ class BurgerBuilder extends Component {
   };
 
   purchaseContinueHandler = () => {
-    // this.setState({ loading: true });
-    // // alert("Continued");
-    // const order = {
-    //   ingredients: this.state.ingredients,
-    //   price: this.state.totalPrice,
-    //   customer: {
-    //     name: "Blah",
-    //     address: {
-    //       street: "123123",
-    //       zipCode: "41345",
-    //       country: "UK"
-    //     },
-    //     email: "test@test.com"
-    //   }
-    // };
-    // axios
-    //   .post("/orders.json", order)
-    //   .then(response => this.setState({ loading: false, purchasing: false }))
-    //   .catch(error => this.setState({ loading: false, purchasing: false }));
-    //Wrapped in router and therefore have permission to-do this...
     const queryParams = [];
     for (let i in this.state.ingredients) {
       queryParams.push(
@@ -120,8 +100,12 @@ class BurgerBuilder extends Component {
           encodeURIComponent(this.state.ingredients[i])
       );
     }
-    const queryString = queryParams.join('&');
-    this.props.history.push({ pathname: "/checkout", search: '?' + queryString });
+    queryParams.push("price=" + this.state.totalPrice);
+    const queryString = queryParams.join("&");
+    this.props.history.push({
+      pathname: "/checkout",
+      search: "?" + queryString
+    });
   };
 
   render() {
